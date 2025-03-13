@@ -8,7 +8,7 @@ public class Matrix {
     public Matrix(int numRows, int numCols) {
         mat = new double[numRows][numCols];
     }
-    
+
     public Matrix(double[][] mat) {
         this.mat = mat;
     }
@@ -48,24 +48,28 @@ public class Matrix {
 
     public Matrix multiply(double scalar) {
         Matrix resultant = new Matrix(this.numRows(), this.numCols());
-        for(int row = 0; row < this.numRows(); row++) {
-            for(int col = 0; col < this.numCols(); col++) {
+        for (int row = 0; row < this.numRows(); row++) {
+            for (int col = 0; col < this.numCols(); col++) {
                 resultant.setElement(row, col, scalar * mat[row][col]);
             }
-        } 
+        }
         return resultant;
     }
 
-    public Matrix subMatrix(List<Integer> includedRows, List<Integer> includedCols) {
-        Matrix resultant = new Matrix(includedRows.size(), includedCols.size());
+    public Matrix subMatrix(List<Integer> removedRows, List<Integer> removedCols) {
+        Matrix resultant = new Matrix(mat.length - removedRows.size(), mat[0].length - removedCols.size());
         List<Double> vals = new ArrayList<>();
-        for(int row : includedRows) {
-            for(int col : includedCols) {
+        for (int row = 0; row < numRows(); row++) {
+            if (removedRows.contains(row))
+                continue;
+            for (int col = 0; col < numCols(); col++) {
+                if (removedCols.contains(col))
+                    continue;
                 vals.add(mat[row][col]);
             }
         }
-        for(int row = 0; row < includedRows.size(); row++) {
-            for(int col = 0; col < includedCols.size(); col++) {
+        for (int row = 0; row < mat.length - removedRows.size(); row++) {
+            for (int col = 0; col < mat.length - removedCols.size(); col++) {
                 resultant.setElement(row, col, vals.get(0));
                 vals.remove(0);
             }
