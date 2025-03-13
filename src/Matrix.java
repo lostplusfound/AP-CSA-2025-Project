@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Matrix {
     private double[][] mat;
@@ -51,6 +53,23 @@ public class Matrix {
                 resultant.setElement(row, col, scalar * mat[row][col]);
             }
         } 
+        return resultant;
+    }
+
+    public Matrix subMatrix(List<Integer> includedRows, List<Integer> includedCols) {
+        Matrix resultant = new Matrix(includedRows.size(), includedCols.size());
+        List<Double> vals = new ArrayList<>();
+        for(int row : includedRows) {
+            for(int col : includedCols) {
+                vals.add(mat[row][col]);
+            }
+        }
+        for(int row = 0; row < includedRows.size(); row++) {
+            for(int col = 0; col < includedCols.size(); col++) {
+                resultant.setElement(row, col, vals.get(0));
+                vals.remove(0);
+            }
+        }
         return resultant;
     }
 
