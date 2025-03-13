@@ -6,6 +6,10 @@ public class Matrix {
     public Matrix(int numRows, int numCols) {
         mat = new double[numRows][numCols];
     }
+    
+    public Matrix(double[][] mat) {
+        this.mat = mat;
+    }
 
     public int numRows() {
         return mat.length;
