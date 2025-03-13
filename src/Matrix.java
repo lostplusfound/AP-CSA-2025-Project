@@ -56,28 +56,45 @@ public class Matrix {
         return resultant;
     }
 
-    public Matrix subMatrix(List<Integer> removedRows, List<Integer> removedCols) {
-        Matrix resultant = new Matrix(mat.length - removedRows.size(), mat[0].length - removedCols.size());
-        List<Double> vals = new ArrayList<>();
-        for (int row = 0; row < numRows(); row++) {
-            if (removedRows.contains(row))
-                continue;
-            for (int col = 0; col < numCols(); col++) {
-                if (removedCols.contains(col))
-                    continue;
-                vals.add(mat[row][col]);
-            }
+    public double findDet() {
+        if (numRows() != numCols()) {
+            throw new IllegalArgumentException("Determinant is only defined for square matrices.");
         }
-        for (int row = 0; row < mat.length - removedRows.size(); row++) {
-            for (int col = 0; col < mat.length - removedCols.size(); col++) {
-                resultant.setElement(row, col, vals.get(0));
-                vals.remove(0);
-            }
+        int n = numRows();
+
+        if (n == 1) {
+            return mat[0][0];
         }
-        return resultant;
+        if (n == 2) {
+            return (mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]);
+        }
+
+        double det = 0;
+        for (int i = 0; i < n; i++) {
+            Matrix subMatrix = subMatrix(i);
+            det += mat[0][i] * Math.pow(-1, i) * subMatrix.findDet();
+        }
+        return det;
     }
 
-        public Matrix multiply(Matrix other){
+    private Matrix subMatrix(int excludedCol) {
+        int size = numRows();
+        double[][] subMat = new double[size - 1][size - 1];
+        int r = 0;
+        for (int i = 1; i < size; i++) {
+            int c = 0;
+            for (int j = 0; j < size; j++) {
+                if (j == excludedCol) continue;
+                subMat[r][c] = mat[i][j];
+                c++;
+            }
+            r++;
+        }
+        return new Matrix(subMat);
+    }
+    
+
+    public Matrix multiply(Matrix other){
         Matrix failureMatrix = new Matrix(1000, 1000); 
         if(this.numRows() == other.numRows() && this.numCols() == other.numCols()){
             Matrix productMatrix = new Matrix(this.numRows(), this.numCols());
@@ -93,10 +110,7 @@ public class Matrix {
             return productMatrix; 
         }
         return failureMatrix; 
-        
-
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -116,5 +130,4 @@ public class Matrix {
     public String toString() {
         return Arrays.deepToString(mat);
     }
-
 }
