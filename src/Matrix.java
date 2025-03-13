@@ -30,18 +30,47 @@ public class Matrix {
     public Matrix add(Matrix other) {
         if (other.numRows() != this.numRows() || other.numCols() != this.numCols())
             return new Matrix(0, 0);
-        Matrix sum = new Matrix(this.numRows(), this.numCols());
+        Matrix resultant = new Matrix(this.numRows(), this.numCols());
         for (int row = 0; row < this.numRows(); row++) {
             for (int col = 0; col < this.numCols(); col++) {
-                sum.setElement(row, col, mat[row][col] + other.getElement(row, col));
+                resultant.setElement(row, col, mat[row][col] + other.getElement(row, col));
             }
         }
-        return sum;
+        return resultant;
+    }
+
+    public Matrix subtract(Matrix other) {
+        other = other.multiply(-1.0);
+        return this.add(other);
+    }
+
+    public Matrix multiply(double scalar) {
+        Matrix resultant = new Matrix(this.numRows(), this.numCols());
+        for(int row = 0; row < this.numRows(); row++) {
+            for(int col = 0; col < this.numCols(); col++) {
+                resultant.setElement(row, col, scalar * mat[row][col]);
+            }
+        } 
+        return resultant;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Matrix other = (Matrix) obj;
+        if (!Arrays.deepEquals(mat, other.mat))
+            return false;
+        return true;
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(mat);
+        return Arrays.deepToString(mat);
     }
 
 }
