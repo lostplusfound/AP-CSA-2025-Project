@@ -40,7 +40,7 @@ public class Matrix {
     }
 
     public Matrix subtract(Matrix other) {
-        other = other.multiply(-1.0);
+        other = other.multiplyByScalar(-1.0);
         return this.add(other);
     }
 
@@ -58,11 +58,11 @@ public class Matrix {
         Matrix failureMatrix = new Matrix(1000, 1000); 
         if(this.numRows() == other.numRows() && this.numCols() == other.numCols()){
             Matrix productMatrix = new Matrix(this.numRows(), this.numCols());
-            for(int r = 0; i < this.numRows(); r++){
+            for(int r = 0; r < this.numRows(); r++){
                 for(int c = 0; c < other.numCols(); c++){
                     double dotProduct = 0.0; 
                     for(int i = 0; i < this.numCols(); i++){
-                        dotProduct += (this[r][i] + other.getElement(r, i)); 
+                        dotProduct += (this.mat[r][i] + other.getElement(r, i)); 
                     }
                     productMatrix.setElement(r, c, dotProduct);  
                 }
