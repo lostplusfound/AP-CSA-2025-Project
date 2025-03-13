@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Matrix {
     private double[][] mat;
 
@@ -21,14 +23,21 @@ public class Matrix {
         mat[row][col] = value;
     }
 
-    public boolean add(Matrix other) {
+    public Matrix add(Matrix other) {
         if (other.numRows() != this.numRows() || other.numCols() != this.numCols())
-            return false;
-        for(int row = 0; row < this.numRows(); row++) {
-            for(int col = 0; col < this.numCols(); col++) {
-                mat[row][col] += other.getElement(row, col);
+            return new Matrix(0, 0);
+        Matrix sum = new Matrix(this.numRows(), this.numCols());
+        for (int row = 0; row < this.numRows(); row++) {
+            for (int col = 0; col < this.numCols(); col++) {
+                sum.setElement(row, col, mat[row][col] + other.getElement(row, col));
             }
         }
-        return true;
+        return sum;
     }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(mat);
+    }
+
 }
