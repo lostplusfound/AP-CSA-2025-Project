@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Matrix {
     private double[][] mat;
@@ -10,7 +8,10 @@ public class Matrix {
     }
 
     public Matrix(double[][] mat) {
-        this.mat = mat;
+        this.mat = new double[mat.length][mat[0].length];
+        for (int i = 0; i < mat.length; i++) {
+            this.mat[i] = mat[i].clone();
+        }
     }
 
     public int numRows() {
@@ -84,7 +85,8 @@ public class Matrix {
         for (int i = 1; i < size; i++) {
             int c = 0;
             for (int j = 0; j < size; j++) {
-                if (j == excludedCol) continue;
+                if (j == excludedCol)
+                    continue;
                 subMat[r][c] = mat[i][j];
                 c++;
             }
@@ -92,24 +94,80 @@ public class Matrix {
         }
         return new Matrix(subMat);
     }
-    
 
-    public Matrix multiply(Matrix other){
-        Matrix failureMatrix = new Matrix(1000, 1000); 
-        if(this.numRows() == other.numRows() && this.numCols() == other.numCols()){
+    public Matrix multiply(Matrix other) {
+        Matrix failureMatrix = new Matrix(1000, 1000);
+        if (this.numRows() == other.numRows() && this.numCols() == other.numCols()) {
             Matrix productMatrix = new Matrix(this.numRows(), this.numCols());
-            for(int r = 0; r < this.numRows(); r++){
-                for(int c = 0; c < other.numCols(); c++){
-                    double dotProduct = 0.0; 
-                    for(int i = 0; i < this.numCols(); i++){
-                        dotProduct += (this.mat[r][i] + other.getElement(r, i)); 
+            for (int r = 0; r < this.numRows(); r++) {
+                for (int c = 0; c < other.numCols(); c++) {
+                    double dotProduct = 0.0;
+                    for (int i = 0; i < this.numCols(); i++) {
+                        dotProduct += (this.mat[r][i] + other.getElement(r, i));
                     }
-                    productMatrix.setElement(r, c, dotProduct);  
+                    productMatrix.setElement(r, c, dotProduct);
                 }
             }
-            return productMatrix; 
+            return productMatrix;
         }
-        return failureMatrix; 
+        return failureMatrix;
+    }
+
+    public Matrix swapRows(int row1, int row2) {
+        Matrix resultant = new Matrix(mat);
+        if (row1 == row2)
+            return resultant;
+        for (int col = 0; col < numCols(); col++) {
+            resultant.setElement(row1, col, mat[row2][col]);
+            resultant.setElement(row2, col, mat[row1][col]);
+        }
+        return resultant;
+    }
+
+    public Matrix multiplyRow(int row, double scalar) {
+        Matrix resultant = new Matrix(this.mat);
+        for (int col = 0; col < resultant.numCols(); col++) {
+            resultant.setElement(row, col, scalar * mat[row][col]);
+        }
+        return resultant;
+    }
+
+    public Matrix addMultipleOfRowToAnother(int row, int otherRow, double scalar) {
+        Matrix resultant = new Matrix(this.mat);
+        for (int col = 0; col < resultant.numCols(); col++) {
+            resultant.setElement(otherRow, col, scalar * mat[row][col] + mat[otherRow][col]);
+        }
+        return resultant;
+    }
+
+    public double[] solve() {
+        Matrix m = new Matrix(mat);
+        for (int pivot = 0; pivot < this.numCols() - 2; pivot++) {
+            int pivotRow = pivot;
+            for (int i = pivot + 1; i < this.numRows(); i++) {
+                if (Math.abs(m.getElement(i, pivot)) > Math.abs(m.getElement(pivotRow, pivot)))
+                    pivotRow = i;
+            }
+            m = m.swapRows(pivot, pivotRow);
+            for (int row = pivot + 1; row < this.numRows(); row++) {
+                double factor = -m.getElement(row, pivot) / m.getElement(pivot, pivot);
+                m = m.addMultipleOfRowToAnother(pivot, row, factor);
+            }
+        }
+        if (m.getElement(m.numRows() - 1, m.numCols() - 2) == 0)
+            return null;
+        double factor = 1 / m.getElement(m.numRows() - 1, m.numCols() - 2);
+        m = m.multiplyRow(m.numRows() - 1, factor);
+        double[] result = new double[this.numRows()];
+        result[result.length - 1] = m.getElement(m.numRows() - 1, m.numCols() - 1);
+        for (int i = m.numRows() - 2; i >= 0; i--) {
+            double sum = m.getElement(i, m.numCols() - 1);
+            for (int j = m.numCols() - 2; j > i; j--) {
+                sum += -m.getElement(i, j) * result[j];
+            }
+            result[i] = sum / m.getElement(i, i);
+        }
+        return result;
     }
 
     @Override
