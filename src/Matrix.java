@@ -32,7 +32,7 @@ public class Matrix {
 
     public Matrix add(Matrix other) {
         if (other.numRows() != this.numRows() || other.numCols() != this.numCols())
-            return new Matrix(0, 0);
+            throw new IllegalArgumentException("Matrix addition cannot be performed on different sized matrices");
         Matrix resultant = new Matrix(this.numRows(), this.numCols());
         for (int row = 0; row < this.numRows(); row++) {
             for (int col = 0; col < this.numCols(); col++) {
