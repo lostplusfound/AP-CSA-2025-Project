@@ -154,7 +154,7 @@ public class Matrix {
                 m = m.addMultipleOfRowToAnother(pivot, row, factor);
             }
         }
-        if (m.getElement(m.numRows() - 1, m.numCols() - 2) == 0)
+        if (Math.abs(m.getElement(m.numRows() - 1, m.numCols() - 2)) < 1e-14)
             return null;
         double factor = 1 / m.getElement(m.numRows() - 1, m.numCols() - 2);
         m = m.multiplyRow(m.numRows() - 1, factor);
