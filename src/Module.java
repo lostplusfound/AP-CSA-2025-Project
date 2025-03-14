@@ -6,7 +6,7 @@ public class Module {
         EASY, MEDIUM, HARD
     };
 
-    public Moddule(int numQuestions, Difficulty difficulty){
+    public Module(int numQuestions, Difficulty difficulty){
         this.numQuestions = numQuestions; 
         this.difficulty = difficulty; 
     }
