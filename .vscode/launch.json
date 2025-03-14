@@ -9,6 +9,13 @@
             "name": "Test",
             "request": "launch",
             "mainClass": "Test",
+            "projectName": "AP-CSA-2025-Project_925a165"
+        },
+        {
+            "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "Test",
             "projectName": "AP-CSA-2025-Project_3523e185"
         },
         {
