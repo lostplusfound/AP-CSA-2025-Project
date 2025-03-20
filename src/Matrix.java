@@ -14,6 +14,10 @@ public class Matrix {
         }
     }
 
+    public double[][] getValues(){
+        return mat; 
+    }
+
     public int numRows() {
         return mat.length;
     }
