@@ -39,6 +39,10 @@ public class DetQuizScreen {
 
         Button submitButton = new Button("Submit Answer");
         submitButton.setStyle("-fx-background-color: #66cc66; -fx-text-fill: white;");
+
+        Button nextButton = new Button("Next");
+        nextButton.setDisable(true);
+        
         submitButton.setOnAction(e -> {
             try {
                 double userAnswer = Double.parseDouble(answerBox.getText().trim());
@@ -47,20 +51,22 @@ public class DetQuizScreen {
                 if (Math.abs(userAnswer - correctAnswer) < 0.0001) { // Allow small floating-point errors
                     feedbackLabel.setText("Correct!");
                     submitButton.setDisable(true);
+                    nextButton.setDisable(false);
                     correctQuestions++;
+                    
                 } else {
                     feedbackLabel.setText("Incorrect. The correct answer is: " + correctAnswer);
                     submitButton.setDisable(true);
+                    nextButton.setDisable(false);
                 }
             } catch (NumberFormatException ex) {
                 feedbackLabel.setText("Invalid input. Please enter a number.");
             }
         });
 
-        // Button to move to the next question
-        Button nextButton = new Button("Next");
         nextButton.setOnAction(e -> {
             submitButton.setDisable(false);
+            nextButton.setDisable(true);
             questionCount++;
 
             if (questionCount <= module.getNumQuestions()) {
@@ -79,6 +85,7 @@ public class DetQuizScreen {
                 correctQuestions = 0;
             }
         });
+        
 
         // Button to return to the home screen
         Button backButton = new Button("Exit quiz");
