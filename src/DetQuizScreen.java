@@ -69,7 +69,7 @@ public class DetQuizScreen {
                 feedbackLabel.setText("");
                 answerBox.clear();
             } else {
-                questionLabel.setText("Quiz complete! You scored " + (correctQuestions / (double)questionCount) * 100 + "%");
+                questionLabel.setText("Quiz complete! You scored " + (correctQuestions / (double) module.getNumQuestions()) * 100 + "%");
                 matrixGrid.setVisible(false);
                 answerBox.setVisible(false);
                 submitButton.setVisible(false);
