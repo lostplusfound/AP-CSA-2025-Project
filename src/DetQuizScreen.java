@@ -14,12 +14,14 @@ import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 
 public class DetQuizScreen {
-    private static int questionCount = 1;
+    private static int questionNum = 1;
     private static int correctQuestions = 0;
     private static Matrix currentMatrix;
+    private static GridPane matrixGrid = new GridPane(); 
 
     public static Scene createQuizScene(Stage primaryStage, Module module) {
-        Label questionLabel = new Label(questionCount + ". What is the determinant of this matrix?");
+        Label questionLabel = new Label(questionNum + ". What is the determinant of this matrix?");
+        matrixGrid.setVisible(true);
         
         int size = switch (module.getDifficulty()) {
             case "Easy" -> 2;
@@ -28,13 +30,13 @@ public class DetQuizScreen {
             default -> throw new IllegalArgumentException("Invalid difficulty");
         };
 
-        // Create matrix grid
-        GridPane matrixGrid = new GridPane();
-        currentMatrix = Module.generateMatrix(size, size);
-        updateQuestion(matrixGrid, currentMatrix, questionLabel);
+        // Initialize matrix grid
         matrixGrid.setHgap(10);
         matrixGrid.setVgap(10);
         matrixGrid.setStyle("-fx-alignment: center;");
+
+        currentMatrix = Module.generateMatrix(size, size);
+        updateQuestion(currentMatrix); 
 
         TextField answerBox = new TextField();
         answerBox.setPromptText("Enter answer");
@@ -61,7 +63,6 @@ public class DetQuizScreen {
                     submitButton.setDisable(true);
                     nextButton.setDisable(false);
                     correctQuestions++;
-                    
                 } else {
                     feedbackLabel.setText("Incorrect. The correct answer is: " + correctAnswer);
                     submitButton.setDisable(true);
@@ -75,13 +76,14 @@ public class DetQuizScreen {
         nextButton.setOnAction(e -> {
             submitButton.setDisable(false);
             nextButton.setDisable(true);
-            questionCount++;
-
-            if (questionCount <= module.getNumQuestions()) {
+            questionNum++;
+        
+            if (questionNum <= module.getNumQuestions()) {
                 currentMatrix = Module.generateMatrix(size, size);
-                updateQuestion(matrixGrid, currentMatrix, questionLabel);
+                updateQuestion(currentMatrix); // Update using only the matrix
                 feedbackLabel.setText("");
                 answerBox.clear();
+                questionLabel.setText(questionNum + ". What is the determinant of this matrix?");
             } else {
                 questionLabel.setText("Quiz complete! You scored " + (correctQuestions / (double) module.getNumQuestions()) * 100 + "%");
                 matrixGrid.setVisible(false);
@@ -89,7 +91,9 @@ public class DetQuizScreen {
                 submitButton.setVisible(false);
                 nextButton.setVisible(false);
                 feedbackLabel.setText("");
-                questionCount = 1;
+        
+                // Reset for the next quiz
+                questionNum = 1;
                 correctQuestions = 0;
             }
         });
@@ -114,8 +118,7 @@ public class DetQuizScreen {
         return new Scene(layout, 400, 400);
     }
 
-    private static void updateQuestion(GridPane matrixGrid, Matrix matrix, Label question) {
-        question.setText(questionCount + ". What is the determinant of this matrix?");
+    private static void updateQuestion(Matrix matrix) {
         matrixGrid.getChildren().clear();
         double[][] values = matrix.getValues();
 
@@ -139,3 +142,4 @@ public class DetQuizScreen {
         matrixGrid.add(rightBorder, values[0].length + 1, 0, 1, values.length);
     }
 }
+
