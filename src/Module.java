@@ -25,7 +25,7 @@ public class Module {
         double[][] vals = new double[length][width];
         for (int r = 0; r < length; r++) {
             for (int c = 0; c < width; c++) {
-                vals[r][c] = (int) (Math.random() * 10);
+                vals[r][c] = (int) (Math.random() * 20);
             }
         }
         return new Matrix(vals);
