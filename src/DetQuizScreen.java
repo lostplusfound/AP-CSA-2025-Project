@@ -1,12 +1,17 @@
+import java.util.Optional;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
 
 public class DetQuizScreen {
     private static int questionCount = 1;
@@ -42,6 +47,9 @@ public class DetQuizScreen {
 
         Button nextButton = new Button("Next");
         nextButton.setDisable(true);
+
+        Button backButton = new Button("Exit quiz");
+        backButton.setStyle("-fx-background-color: #ff6666; -fx-text-fill: white;");
         
         submitButton.setOnAction(e -> {
             try {
@@ -88,9 +96,14 @@ public class DetQuizScreen {
         
 
         // Button to return to the home screen
-        Button backButton = new Button("Exit quiz");
-        backButton.setStyle("-fx-background-color: #ff6666; -fx-text-fill: white;");
-        backButton.setOnAction(e -> new HomeScreen().start(primaryStage));
+        backButton.setOnAction(e -> {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setContentText("Are you sure you want to quit? Your progress will not be saved.");
+            Optional<ButtonType> result = confirm.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                new HomeScreen().start(primaryStage);
+            }
+        });
 
         // Set up the layout
         HBox buttonBox = new HBox(10, submitButton, nextButton);
