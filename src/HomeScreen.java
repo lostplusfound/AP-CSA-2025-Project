@@ -16,19 +16,19 @@ public class HomeScreen extends Application {
         // Title and subtitle
         Label title = new Label("Welcome to the Matrix");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;");
-        
-        Label subtitle = new Label("Customize your quiz");
-        subtitle.setStyle("-fx-font-size: 16px; -fx-padding: 5; -fx-text-fill: gray;"); 
 
-        // Create dropdowns for quiz type 
+        Label subtitle = new Label("Customize your quiz");
+        subtitle.setStyle("-fx-font-size: 16px; -fx-padding: 5; -fx-text-fill: gray;");
+
+        // Create dropdowns for quiz type
         ChoiceBox<String> quizTypeChoiceBox = new ChoiceBox<>();
         quizTypeChoiceBox.getItems().addAll("Determinant", "Multiplication", "Systems");
-        quizTypeChoiceBox.setValue("Determinant");  
+        quizTypeChoiceBox.setValue("Determinant");
 
         // Dropdown for difficulty
         ChoiceBox<String> difficultyChoiceBox = new ChoiceBox<>();
         difficultyChoiceBox.getItems().addAll("Easy", "Medium", "Hard");
-        difficultyChoiceBox.setValue("Medium");  
+        difficultyChoiceBox.setValue("Medium");
 
         // Create a TextField for the number of questions
         TextField numQuestionsTextField = new TextField();
@@ -37,7 +37,8 @@ public class HomeScreen extends Application {
 
         // Create Start Quiz Button
         Button startQuizButton = new Button("Start Quiz");
-        startQuizButton.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+        startQuizButton.setStyle(
+                "-fx-font-size: 14px; -fx-padding: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
 
         // Event for start quiz btn
         startQuizButton.setOnAction(_ -> {
@@ -45,23 +46,46 @@ public class HomeScreen extends Application {
             String selectedQuizType = quizTypeChoiceBox.getValue();
             String selectedDifficulty = difficultyChoiceBox.getValue();
             String numQuestionsInput = numQuestionsTextField.getText();
+            switch (selectedQuizType) {
+                case "Determinant":
+                    try {
+                        int numQuestions = Integer.parseInt(numQuestionsInput);
+                        Module selectedModule = new Module(selectedQuizType, numQuestions, selectedDifficulty);
+                        System.out.println("Starting " + selectedQuizType + " Quiz with " + numQuestions
+                                + " questions at " + selectedDifficulty + " difficulty.");
+                        primaryStage.setScene(DetQuizScreen.createQuizScene(primaryStage, selectedModule));
 
-            try {
-                int numQuestions = Integer.parseInt(numQuestionsInput); 
-                Module selectedModule = new Module(selectedQuizType, numQuestions, selectedDifficulty);
-                System.out.println("Starting " + selectedQuizType + " Quiz with " + numQuestions + " questions at " + selectedDifficulty + " difficulty.");
-                primaryStage.setScene(DetQuizScreen.createQuizScene(primaryStage, selectedModule));
+                    } catch (NumberFormatException ex) {
+                        // Handle invalid number input
+                        Alert a = new Alert(AlertType.ERROR);
+                        a.setContentText("Please enter a valid number of questions.");
+                        a.show();
+                    }
+                    break;
+                case "Multiplication":
+                    break;
+                case "Systems":
+                    try {
+                        int numQuestions = Integer.parseInt(numQuestionsInput);
+                        Module selectedModule = new Module(selectedQuizType, numQuestions, selectedDifficulty);
+                        System.out.println("Starting " + selectedQuizType + " Quiz with " + numQuestions
+                                + " questions at " + selectedDifficulty + " difficulty.");
+                        primaryStage.setScene(SystemsQuizScreen.getScene(primaryStage, selectedModule));
 
-            } catch (NumberFormatException ex) {
-                // Handle invalid number input
-                Alert a = new Alert(AlertType.ERROR);
-                a.setContentText("Please enter a valid number of questions.");
-                a.show();
+                    } catch (NumberFormatException ex) {
+                        // Handle invalid number input
+                        Alert a = new Alert(AlertType.ERROR);
+                        a.setContentText("Please enter a valid number of questions.");
+                        a.show();
+                    }
+                    break;
+
             }
         });
 
         // Layout: stack the elements vertically
-        VBox layout = new VBox(10, title, subtitle, quizTypeChoiceBox, difficultyChoiceBox, numQuestionsTextField, startQuizButton);
+        VBox layout = new VBox(10, title, subtitle, quizTypeChoiceBox, difficultyChoiceBox, numQuestionsTextField,
+                startQuizButton);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
         // Set up the scene and stage
