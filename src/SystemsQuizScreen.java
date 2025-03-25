@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,10 +14,18 @@ public class SystemsQuizScreen {
     private static int questionIndex = 1;
     private static int numCorrect = 0;
     private static Matrix currentMatrix;
+    private static GridPane matrixGrid;
+    private static int size; 
+    private static Label questionLabel;
+    private static Label feedbackLabel;
+    private static Button submitButton;
+    private static Button nextButton;
+    private static Button exitButton;
+    private static TextField[] inputs;
 
     public static Scene getScene(Stage primaryStage, Module module) {
-        Label questionLabel = new Label(questionIndex + ". What is the solution to this system?");
-        int size = switch (module.getDifficulty()) {
+        questionLabel = new Label(questionIndex + ". What is the solution to this system?");
+        size = switch (module.getDifficulty()) {
             case "Easy" -> 2;
             case "Medium" -> 3;
             case "Hard" -> 4;
@@ -23,64 +33,42 @@ public class SystemsQuizScreen {
         };
 
         // Create matrix grid
-        GridPane matrixGrid = new GridPane();
+        matrixGrid = new GridPane();
         currentMatrix = Module.generateMatrix(size, size + 1);
-        updateQuestion(matrixGrid, currentMatrix, questionLabel);
+        updateQuestion(currentMatrix);
         matrixGrid.setHgap(10);
         matrixGrid.setVgap(10);
         matrixGrid.setStyle("-fx-alignment: center;");
 
         HBox inputRow = new HBox();
-        inputRow.setAlignment(javafx.geometry.Pos.CENTER);
-        TextField[] inputs = new TextField[size];
-        for (int i = 0; i < size; i++) {
+        inputRow.getStyleClass().add("input-row");
+        inputs = new TextField[size];
+        for(int i = 0; i < size; i++) {
             inputs[i] = new TextField();
+            inputs[i].getStyleClass().add("answer-box");
             inputs[i].setPromptText("Value of variable " + (i + 1));
         }
         inputRow.getChildren().addAll(inputs);
-        double[] userAnswer = new double[size];
 
-        Label feedbackLabel = new Label();
+        feedbackLabel = new Label();
 
-        Button noSolution = new Button("No Solution");
-        noSolution.setStyle("-fx-background-color: #000000; -fx-text-fill: white;");
+        submitButton = new Button("Submit Answer");
+        submitButton.getStyleClass().add("submit-button");
 
-        Button submitButton = new Button("Submit Answer");
-        submitButton.setStyle("-fx-background-color: #66cc66; -fx-text-fill: white;");
-
-        Button nextButton = new Button("Next");
+        nextButton = new Button("Next");
+        nextButton.getStyleClass().add("next-button");
         nextButton.setDisable(true);
-
-        noSolution.setOnAction(e -> {
-            double[] correctAnswer = currentMatrix.solve();
-            if(correctAnswer == null) {
-                feedbackLabel.setText("Correct!");
-                submitButton.setDisable(true);
-                nextButton.setDisable(false);
-                numCorrect++;
-
-            } else {
-                String answerString = "";
-                for (double d : correctAnswer) {
-                    answerString += String.format("%.3f ", d);
-                }
-                feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
-                submitButton.setDisable(true);
-                nextButton.setDisable(false);
-            }
-
-        });
 
         submitButton.setOnAction(e -> {
             try {
-
-                for (int i = 0; i < userAnswer.length; i++) {
+                double[] userAnswer = new double[size];
+                for(int i = 0; i < userAnswer.length; i++) {
                     userAnswer[i] = parseUserAnswer(inputs[i].getText().trim());
                 }
 
                 double[] correctAnswer = currentMatrix.solve();
 
-                if (checkAnswer(correctAnswer, userAnswer)) {
+                if (checkAnswer(correctAnswer, userAnswer)) { // Allow small floating-point errors
                     feedbackLabel.setText("Correct!");
                     submitButton.setDisable(true);
                     nextButton.setDisable(false);
@@ -88,8 +76,8 @@ public class SystemsQuizScreen {
 
                 } else {
                     String answerString = "";
-                    for (double d : correctAnswer) {
-                        answerString += String.format("%.3f ", d);
+                    for(double d : correctAnswer) {
+                        answerString += String.format("%.3f, ", d);
                     }
                     feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
                     submitButton.setDisable(true);
@@ -107,9 +95,9 @@ public class SystemsQuizScreen {
 
             if (questionIndex <= module.getNumQuestions()) {
                 currentMatrix = Module.generateMatrix(size, size + 1);
-                updateQuestion(matrixGrid, currentMatrix, questionLabel);
+                updateQuestion(currentMatrix);
                 feedbackLabel.setText("");
-                for (TextField tf : inputs) {
+                for(TextField tf : inputs) {
                     tf.clear();
                 }
             } else {
@@ -120,28 +108,30 @@ public class SystemsQuizScreen {
                 submitButton.setVisible(false);
                 nextButton.setVisible(false);
                 feedbackLabel.setText("");
-                noSolution.setVisible(false);
                 questionIndex = 1;
                 numCorrect = 0;
             }
         });
 
         // Button to return to the home screen
-        Button backButton = new Button("Exit quiz");
-        backButton.setStyle("-fx-background-color: #ff6666; -fx-text-fill: white;");
-        backButton.setOnAction(e -> new HomeScreen().start(primaryStage));
+        exitButton = new Button("Exit quiz");
+        exitButton.getStyleClass().add("exit-button");
+        exitButton.setOnAction(e -> new HomeScreen().start(primaryStage));
 
         // Set up the layout
-        HBox buttonBox = new HBox(10, noSolution, submitButton, nextButton);
+        HBox buttonBox = new HBox(10, submitButton, nextButton);
         buttonBox.setStyle("-fx-alignment: center;");
-        VBox layout = new VBox(20, questionLabel, matrixGrid, inputRow, feedbackLabel, buttonBox, backButton);
-        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+        VBox layout = new VBox(20, questionLabel, matrixGrid, inputRow, feedbackLabel, buttonBox, exitButton);
+        layout.getStyleClass().add("quiz-layout");
 
-        return new Scene(layout, 400, 400);
+        Scene systemsQuizScene = new Scene(layout, 400, 400);
+        systemsQuizScene.getStylesheets().add("styles.css");
+
+        return systemsQuizScene;
     }
 
-    private static void updateQuestion(GridPane matrixGrid, Matrix matrix, Label question) {
-        question.setText(questionIndex + ". What is the solution to this sytem?");
+    private static void updateQuestion(Matrix matrix) {
+        questionLabel.setText(questionIndex + ". What is the solution to this system?");
         matrixGrid.getChildren().clear();
 
         // Create a solid left border (Rectangle)
@@ -165,20 +155,16 @@ public class SystemsQuizScreen {
     }
 
     private static double parseUserAnswer(String input) {
-        if (input.indexOf('/') >= 0) {
+        if(input.indexOf('/') >= 0) {
             String[] fraction = input.split("/");
-            return Double.parseDouble(fraction[0]) / Double.parseDouble(fraction[1]);
+            return Double.parseDouble(fraction[0])/Double.parseDouble(fraction[1]);
         }
         return Double.parseDouble(input);
     }
 
     private static boolean checkAnswer(double[] correctAnswer, double[] userAnswer) {
-        if (correctAnswer == null && userAnswer == null)
-            return true;
-        for (int i = 0; i < correctAnswer.length; i++) {
-            // Allow small floating-point errors
-            if (Math.abs(userAnswer[i] - correctAnswer[i]) > 0.0001)
-                return false;
+        for(int i = 0; i < correctAnswer.length; i++) {
+            if(Math.abs(userAnswer[i] - correctAnswer[i]) > 0.0001) return false;
         }
         return true;
     }
