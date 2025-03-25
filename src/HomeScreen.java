@@ -59,6 +59,7 @@ public class HomeScreen extends Application {
                         break;
                     case "Systems": 
                         primaryStage.setScene(SystemsQuizScreen.getScene(primaryStage, selectedModule));
+                        primaryStage.setMaximized(true);
                 }
             } catch (NumberFormatException ex) {
                 // Handle invalid number input
