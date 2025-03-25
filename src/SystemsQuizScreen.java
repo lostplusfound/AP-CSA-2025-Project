@@ -35,6 +35,7 @@ public class SystemsQuizScreen {
         TextField[] inputs = new TextField[size];
         for (int i = 0; i < size; i++) {
             inputs[i] = new TextField();
+            inputs[i].setPromptText("Value of variable " + (i + 1));
         }
         inputRow.getChildren().addAll(inputs);
         double[] userAnswer = new double[size];
