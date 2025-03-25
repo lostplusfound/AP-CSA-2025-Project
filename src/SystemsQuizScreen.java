@@ -24,6 +24,7 @@ public class SystemsQuizScreen {
 
     public static Scene getScene(Stage primaryStage, Module module) {
         questionLabel = new Label(questionIndex + ". What is the solution to this system?");
+        questionLabel.getStyleClass().add("question-label");
         size = switch (module.getDifficulty()) {
             case "Easy" -> 2;
             case "Medium" -> 3;
@@ -33,23 +34,26 @@ public class SystemsQuizScreen {
 
         // Create matrix grid
         matrixGrid = new GridPane();
+        matrixGrid.getStyleClass().add("matrix-grid");
         currentMatrix = Module.generateMatrix(size, size + 1);
         updateQuestion(currentMatrix);
-        matrixGrid.setHgap(10);
-        matrixGrid.setVgap(10);
-        matrixGrid.setStyle("-fx-alignment: center;");
 
-        HBox inputRow = new HBox();
+
+
+
+        HBox inputRow = new HBox(10);
         inputRow.getStyleClass().add("input-row");
         inputs = new TextField[size];
         for(int i = 0; i < size; i++) {
             inputs[i] = new TextField();
             inputs[i].getStyleClass().add("answer-box");
+            inputs[i].setMaxWidth(120);
             inputs[i].setPromptText("Value of variable " + (i + 1));
         }
         inputRow.getChildren().addAll(inputs);
 
         feedbackLabel = new Label();
+        feedbackLabel.getStyleClass().addAll("feedback-label");
 
         noSolutionButton = new Button("No solution");
         noSolutionButton.getStyleClass().add("no-solution-button");
@@ -64,6 +68,7 @@ public class SystemsQuizScreen {
         noSolutionButton.setOnAction(e -> {
             double[] correctAnswer = currentMatrix.solve();
             if (correctAnswer == null) { 
+                feedbackLabel.setStyle("-fx-text-fill: #00ff08;");
                 feedbackLabel.setText("Correct!");
                 submitButton.setDisable(true);
                 nextButton.setDisable(false);
@@ -74,7 +79,7 @@ public class SystemsQuizScreen {
                 for(double d : correctAnswer) {
                     answerString += String.format("%.3f, ", d);
                 }
-                answerString = answerString.substring(0, answerString.length() - 2);
+                feedbackLabel.setStyle("-fx-text-fill:rgb(255, 0, 0);");
                 feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
                 submitButton.setDisable(true);
                 nextButton.setDisable(false);
@@ -92,6 +97,7 @@ public class SystemsQuizScreen {
                 double[] correctAnswer = currentMatrix.solve();
 
                 if (checkAnswer(correctAnswer, userAnswer)) { // Allow small floating-point errors
+                    feedbackLabel.setStyle("-fx-text-fill: #00ff08;");
                     feedbackLabel.setText("Correct!");
                     submitButton.setDisable(true);
                     nextButton.setDisable(false);
@@ -102,7 +108,7 @@ public class SystemsQuizScreen {
                     for(double d : correctAnswer) {
                         answerString += String.format("%.3f, ", d);
                     }
-                    answerString = answerString.substring(0, answerString.length() - 2);
+                    feedbackLabel.setStyle("-fx-text-fill:rgb(255, 0, 0);");
                     feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
                     submitButton.setDisable(true);
                     nextButton.setDisable(false);
@@ -132,18 +138,15 @@ public class SystemsQuizScreen {
                 submitButton.setVisible(false);
                 nextButton.setVisible(false);
                 feedbackLabel.setText("");
-                noSolutionButton.setVisible(false);
                 questionIndex = 1;
                 numCorrect = 0;
             }
         });
 
-        // Button to return to the home screen
         exitButton = new Button("Exit quiz");
         exitButton.getStyleClass().add("exit-button");
         exitButton.setOnAction(e -> new HomeScreen().start(primaryStage));
 
-        // Set up the layout
         HBox buttonBox = new HBox(10, noSolutionButton, submitButton, nextButton);
         buttonBox.setStyle("-fx-alignment: center;");
         VBox layout = new VBox(20, questionLabel, matrixGrid, inputRow, feedbackLabel, buttonBox, exitButton);
@@ -159,23 +162,20 @@ public class SystemsQuizScreen {
         questionLabel.setText(questionIndex + ". What is the solution to this system?");
         matrixGrid.getChildren().clear();
 
-        // Create a solid left border (Rectangle)
         Rectangle leftBorder = new Rectangle(1, matrix.numRows() * 50);
-        leftBorder.setStyle("-fx-fill: black;");
+        leftBorder.getStyleClass().add("matrix-border");
         matrixGrid.add(leftBorder, 0, 0, 1, matrix.numRows());
 
-        // Create matrix grid
         for (int row = 0; row < matrix.numRows(); row++) {
             for (int col = 0; col < matrix.numCols(); col++) {
                 Label label = new Label(String.valueOf(matrix.getElement(row, col)));
-                label.setStyle("-fx-padding: 10px; -fx-font-size: 16px; -fx-text-alignment: center;");
+                label.getStyleClass().add("matrix-cell");
                 matrixGrid.add(label, col + 1, row);
             }
         }
 
-        // Create a solid right border (Rectangle)
         Rectangle rightBorder = new Rectangle(1, matrix.numRows() * 50);
-        rightBorder.setStyle("-fx-fill: black;");
+        rightBorder.getStyleClass().add("matrix-border");
         matrixGrid.add(rightBorder, matrix.numCols() + 1, 0, 1, matrix.numRows());
     }
 
