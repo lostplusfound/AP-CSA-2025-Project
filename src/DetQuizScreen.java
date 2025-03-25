@@ -1,145 +1,139 @@
 import java.util.Optional;
-
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
+import javafx.scene.shape.Rectangle;
 
 public class DetQuizScreen {
     private static int questionNum = 1;
     private static int correctQuestions = 0;
     private static Matrix currentMatrix;
-    private static GridPane matrixGrid = new GridPane(); 
+    private static GridPane matrixGrid;
+    private static Label questionLabel;
+    private static TextField answerBox;
+    private static Label feedbackLabel;
+    private static Button submitButton;
+    private static Button nextButton; 
+    private static Button exitButton; 
+    private static int size;
 
     public static Scene createQuizScene(Stage primaryStage, Module module) {
-        Label questionLabel = new Label(questionNum + ". What is the determinant of this matrix?");
-        matrixGrid.setVisible(true);
-        
-        int size = switch (module.getDifficulty()) {
+        questionNum = 1;
+        correctQuestions = 0;
+        size = switch (module.getDifficulty()) {
             case "Easy" -> 2;
             case "Medium" -> 3;
             case "Hard" -> 4;
             default -> throw new IllegalArgumentException("Invalid difficulty");
         };
+        matrixGrid = new GridPane(); 
+        questionLabel = new Label(questionNum + ". What is the determinant of this matrix?");
+        answerBox = new TextField();
+        feedbackLabel = new Label();
+        submitButton = new Button("Submit Answer");
+        nextButton = new Button("Next");
+        exitButton = new Button("Exit quiz");
 
-        // Initialize matrix grid
-        matrixGrid.setHgap(10);
-        matrixGrid.setVgap(10);
-        matrixGrid.setStyle("-fx-alignment: center;");
-
+        matrixGrid.getStyleClass().add("matrix-grid");
         currentMatrix = Module.generateMatrix(size, size);
-        updateQuestion(currentMatrix); 
+        updateQuestion(currentMatrix);
 
-        TextField answerBox = new TextField();
+        
+
         answerBox.setPromptText("Enter answer");
         answerBox.setMaxWidth(200);
-
-        Label feedbackLabel = new Label();
-
-        Button submitButton = new Button("Submit Answer");
-        submitButton.setStyle("-fx-background-color: #66cc66; -fx-text-fill: white;");
-
-        Button nextButton = new Button("Next");
+        answerBox.getStyleClass().add("answer-box");
+        
+        submitButton.getStyleClass().add("submit-button");
         nextButton.setDisable(true);
+        nextButton.getStyleClass().add("next-button");
+        exitButton.getStyleClass().add("exit-button");
 
-        Button backButton = new Button("Exit quiz");
-        backButton.setStyle("-fx-background-color: #ff6666; -fx-text-fill: white;");
-        
-        submitButton.setOnAction(e -> {
-            try {
-                double userAnswer = Double.parseDouble(answerBox.getText().trim());
-                double correctAnswer = currentMatrix.findDet();
+        submitButton.setOnAction(e -> handleSubmit());
+        nextButton.setOnAction(e -> handleNext(module, size));
+        exitButton.setOnAction(e -> handleBack(primaryStage));
 
-                if (Math.abs(userAnswer - correctAnswer) < 0.0001) { // Allow small floating-point errors
-                    feedbackLabel.setText("Correct!");
-                    submitButton.setDisable(true);
-                    nextButton.setDisable(false);
-                    correctQuestions++;
-                } else {
-                    feedbackLabel.setText("Incorrect. The correct answer is: " + correctAnswer);
-                    submitButton.setDisable(true);
-                    nextButton.setDisable(false);
-                }
-            } catch (NumberFormatException ex) {
-                feedbackLabel.setText("Invalid input. Please enter a number.");
-            }
-        });
-
-        nextButton.setOnAction(e -> {
-            submitButton.setDisable(false);
-            nextButton.setDisable(true);
-            questionNum++;
-        
-            if (questionNum <= module.getNumQuestions()) {
-                currentMatrix = Module.generateMatrix(size, size);
-                updateQuestion(currentMatrix); // Update using only the matrix
-                feedbackLabel.setText("");
-                answerBox.clear();
-                questionLabel.setText(questionNum + ". What is the determinant of this matrix?");
-            } else {
-                questionLabel.setText("Quiz complete! You scored " + (correctQuestions / (double) module.getNumQuestions()) * 100 + "%");
-                matrixGrid.setVisible(false);
-                answerBox.setVisible(false);
-                submitButton.setVisible(false);
-                nextButton.setVisible(false);
-                feedbackLabel.setText("");
-        
-                // Reset for the next quiz
-                questionNum = 1;
-                correctQuestions = 0;
-            }
-        });
-        
-
-        // Button to return to the home screen
-        backButton.setOnAction(e -> {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setContentText("Are you sure you want to quit? Your progress will not be saved.");
-            Optional<ButtonType> result = confirm.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                new HomeScreen().start(primaryStage);
-            }
-        });
-
-        // Set up the layout
         HBox buttonBox = new HBox(10, submitButton, nextButton);
-        buttonBox.setStyle("-fx-alignment: center;");
-        VBox layout = new VBox(20, questionLabel, matrixGrid, answerBox, feedbackLabel, buttonBox, backButton);
-        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+        buttonBox.getStyleClass().add("button-box");
+        VBox layout = new VBox(20, questionLabel, matrixGrid, answerBox, feedbackLabel, buttonBox, exitButton);
+        layout.getStyleClass().add("quiz-layout");
 
-        return new Scene(layout, 400, 400);
+        Scene detQuizScene = new Scene(layout, 400, 400);
+        detQuizScene.getStylesheets().add("styles.css");
+        return detQuizScene;
+    }
+
+    private static void handleSubmit() {
+        try {
+            double userAnswer = Double.parseDouble(answerBox.getText().trim());
+            double correctAnswer = currentMatrix.findDet();
+
+            if (Math.abs(userAnswer - correctAnswer) < 0.0001) {
+                feedbackLabel.setText("Correct!");
+                submitButton.setDisable(true);
+                nextButton.setDisable(false);
+                correctQuestions++;
+            } else {
+                feedbackLabel.setText("Incorrect. The correct answer is: " + correctAnswer);
+                submitButton.setDisable(true);
+                nextButton.setDisable(false);
+            }
+        } catch (NumberFormatException ex) {
+            feedbackLabel.setText("Invalid input. Please enter a number.");
+        }
+    }
+
+    private static void handleNext(Module module, int size) {
+        submitButton.setDisable(false);
+        nextButton.setDisable(true);
+        questionNum++;
+
+        if (questionNum <= module.getNumQuestions()) {
+            currentMatrix = Module.generateMatrix(size, size);
+            updateQuestion(currentMatrix);
+            feedbackLabel.setText("");
+            answerBox.clear();
+            questionLabel.setText(questionNum + ". What is the determinant of this matrix?");
+        } else {
+            questionLabel.setText("Quiz complete! You scored " + (correctQuestions / (double) module.getNumQuestions()) * 100 + "%");
+            matrixGrid.setVisible(false);
+            answerBox.setVisible(false);
+            submitButton.setVisible(false);
+            nextButton.setVisible(false);
+            feedbackLabel.setText("");
+        }
+    }
+
+    private static void handleBack(Stage primaryStage) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setContentText("Are you sure you want to quit? Your progress will not be saved.");
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            new HomeScreen().start(primaryStage);
+        }
     }
 
     private static void updateQuestion(Matrix matrix) {
         matrixGrid.getChildren().clear();
         double[][] values = matrix.getValues();
 
-        // Create a solid left border (Rectangle)
         Rectangle leftBorder = new Rectangle(1, values.length * 50);
-        leftBorder.setStyle("-fx-fill: black;");
+        leftBorder.getStyleClass().add("matrix-border");
         matrixGrid.add(leftBorder, 0, 0, 1, values.length);
 
-        // Create matrix grid
         for (int row = 0; row < values.length; row++) {
             for (int col = 0; col < values[row].length; col++) {
                 Label label = new Label(String.valueOf(values[row][col]));
-                label.setStyle("-fx-padding: 10px; -fx-font-size: 16px; -fx-text-alignment: center;");
+                label.getStyleClass().add("matrix-cell");
                 matrixGrid.add(label, col + 1, row);
             }
         }
 
-        // Create a solid right border (Rectangle)
         Rectangle rightBorder = new Rectangle(1, values.length * 50);
-        rightBorder.setStyle("-fx-fill: black;");
+        rightBorder.getStyleClass().add("matrix-border");
         matrixGrid.add(rightBorder, values[0].length + 1, 0, 1, values.length);
     }
 }
-

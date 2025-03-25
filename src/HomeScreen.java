@@ -1,11 +1,7 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -13,32 +9,35 @@ public class HomeScreen extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Title and subtitle
+        // Load the background image
+
+        // UI Elements
         Label title = new Label("Welcome to the Matrix");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;");
+        title.getStyleClass().add("title");
 
         Label subtitle = new Label("Customize your quiz");
-        subtitle.setStyle("-fx-font-size: 16px; -fx-padding: 5; -fx-text-fill: gray;");
+        subtitle.getStyleClass().add("subtitle");
 
         // Create dropdowns for quiz type
         ChoiceBox<String> quizTypeChoiceBox = new ChoiceBox<>();
         quizTypeChoiceBox.getItems().addAll("Determinant", "Multiplication", "Systems");
         quizTypeChoiceBox.setValue("Determinant");
+        quizTypeChoiceBox.getStyleClass().add("dropdown");
 
         // Dropdown for difficulty
         ChoiceBox<String> difficultyChoiceBox = new ChoiceBox<>();
         difficultyChoiceBox.getItems().addAll("Easy", "Medium", "Hard");
         difficultyChoiceBox.setValue("Medium");
+        difficultyChoiceBox.getStyleClass().add("dropdown");
 
         // Create a TextField for the number of questions
         TextField numQuestionsTextField = new TextField();
         numQuestionsTextField.setPromptText("Enter number of questions");
-        numQuestionsTextField.setMaxWidth(500);
+        numQuestionsTextField.getStyleClass().add("input-field");
 
         // Create Start Quiz Button
         Button startQuizButton = new Button("Start Quiz");
-        startQuizButton.setStyle(
-                "-fx-font-size: 14px; -fx-padding: 10px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+        startQuizButton.getStyleClass().add("start-button");
 
         // Event for start quiz btn
         startQuizButton.setOnAction(_ -> {
@@ -46,50 +45,38 @@ public class HomeScreen extends Application {
             String selectedQuizType = quizTypeChoiceBox.getValue();
             String selectedDifficulty = difficultyChoiceBox.getValue();
             String numQuestionsInput = numQuestionsTextField.getText();
-            switch (selectedQuizType) {
-                case "Determinant":
-                    try {
-                        int numQuestions = Integer.parseInt(numQuestionsInput);
-                        Module selectedModule = new Module(selectedQuizType, numQuestions, selectedDifficulty);
-                        System.out.println("Starting " + selectedQuizType + " Quiz with " + numQuestions
-                                + " questions at " + selectedDifficulty + " difficulty.");
+
+            try {
+                int numQuestions = Integer.parseInt(numQuestionsInput); 
+                Module selectedModule = new Module(selectedQuizType, numQuestions, selectedDifficulty);
+                System.out.println("Starting " + selectedQuizType + " Quiz with " + numQuestions + " questions at " + selectedDifficulty + " difficulty.");
+                switch(selectedQuizType){
+                    case "Determinant": 
                         primaryStage.setScene(DetQuizScreen.createQuizScene(primaryStage, selectedModule));
-
-                    } catch (NumberFormatException ex) {
-                        // Handle invalid number input
-                        Alert a = new Alert(AlertType.ERROR);
-                        a.setContentText("Please enter a valid number of questions.");
-                        a.show();
-                    }
-                    break;
-                case "Multiplication":
-                    break;
-                case "Systems":
-                    try {
-                        int numQuestions = Integer.parseInt(numQuestionsInput);
-                        Module selectedModule = new Module(selectedQuizType, numQuestions, selectedDifficulty);
-                        System.out.println("Starting " + selectedQuizType + " Quiz with " + numQuestions
-                                + " questions at " + selectedDifficulty + " difficulty.");
+                        primaryStage.setMaximized(true);
+                        break;
+                    case "Multiplication":
+                        break;
+                    case "Systems": 
                         primaryStage.setScene(SystemsQuizScreen.getScene(primaryStage, selectedModule));
-
-                    } catch (NumberFormatException ex) {
-                        // Handle invalid number input
-                        Alert a = new Alert(AlertType.ERROR);
-                        a.setContentText("Please enter a valid number of questions.");
-                        a.show();
-                    }
-                    break;
-
+                }
+            } catch (NumberFormatException ex) {
+                // Handle invalid number input
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setContentText("Please enter a valid number of questions.");
+                a.show();
             }
         });
 
-        // Layout: stack the elements vertically
-        VBox layout = new VBox(10, title, subtitle, quizTypeChoiceBox, difficultyChoiceBox, numQuestionsTextField,
-                startQuizButton);
-        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+        VBox layout = new VBox(10, title, subtitle, quizTypeChoiceBox, difficultyChoiceBox, numQuestionsTextField, startQuizButton);
+        layout.getStyleClass().add("layout");
 
-        // Set up the scene and stage
-        Scene homeScene = new Scene(layout, 300, 300);
+        StackPane root = new StackPane(layout);
+        root.getStyleClass().add("home-screen");
+
+        Scene homeScene = new Scene(root, 600, 600);
+        homeScene.getStylesheets().add("styles.css");
+        primaryStage.setMaximized(true);
         primaryStage.setTitle("The Matrix Quiz");
         primaryStage.setScene(homeScene);
         primaryStage.show();
