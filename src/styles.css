@@ -161,3 +161,7 @@
 .exit-button:hover {
     -fx-background-color: #c82333;
 }
+
+.input-row {
+    -fx-alignment: center;
+}
