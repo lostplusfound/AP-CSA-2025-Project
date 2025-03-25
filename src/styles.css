@@ -127,6 +127,23 @@
     -fx-alignment: center;
 }
 
+.no-solution-button {
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+.no-solution-button:hover {
+    -fx-background-color: #5f5f5f;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+
 .submit-button {
     -fx-background-color: #28a745;
     -fx-text-fill: white;

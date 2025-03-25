@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +16,7 @@ public class SystemsQuizScreen {
     private static int size; 
     private static Label questionLabel;
     private static Label feedbackLabel;
+    private static Button noSolutionButton;
     private static Button submitButton;
     private static Button nextButton;
     private static Button exitButton;
@@ -52,12 +51,35 @@ public class SystemsQuizScreen {
 
         feedbackLabel = new Label();
 
+        noSolutionButton = new Button("No solution");
+        noSolutionButton.getStyleClass().add("no-solution-button");
+
         submitButton = new Button("Submit Answer");
         submitButton.getStyleClass().add("submit-button");
 
         nextButton = new Button("Next");
         nextButton.getStyleClass().add("next-button");
         nextButton.setDisable(true);
+
+        noSolutionButton.setOnAction(e -> {
+            double[] correctAnswer = currentMatrix.solve();
+            if (correctAnswer == null) { 
+                feedbackLabel.setText("Correct!");
+                submitButton.setDisable(true);
+                nextButton.setDisable(false);
+                numCorrect++;
+
+            } else {
+                String answerString = "";
+                for(double d : correctAnswer) {
+                    answerString += String.format("%.3f, ", d);
+                }
+                feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
+                submitButton.setDisable(true);
+                nextButton.setDisable(false);
+            }
+
+        });
 
         submitButton.setOnAction(e -> {
             try {
@@ -119,7 +141,7 @@ public class SystemsQuizScreen {
         exitButton.setOnAction(e -> new HomeScreen().start(primaryStage));
 
         // Set up the layout
-        HBox buttonBox = new HBox(10, submitButton, nextButton);
+        HBox buttonBox = new HBox(10, noSolutionButton, submitButton, nextButton);
         buttonBox.setStyle("-fx-alignment: center;");
         VBox layout = new VBox(20, questionLabel, matrixGrid, inputRow, feedbackLabel, buttonBox, exitButton);
         layout.getStyleClass().add("quiz-layout");
