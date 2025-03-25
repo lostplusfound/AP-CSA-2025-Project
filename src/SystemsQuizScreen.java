@@ -74,6 +74,7 @@ public class SystemsQuizScreen {
                 for(double d : correctAnswer) {
                     answerString += String.format("%.3f, ", d);
                 }
+                answerString = answerString.substring(0, answerString.length() - 2);
                 feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
                 submitButton.setDisable(true);
                 nextButton.setDisable(false);
@@ -101,6 +102,7 @@ public class SystemsQuizScreen {
                     for(double d : correctAnswer) {
                         answerString += String.format("%.3f, ", d);
                     }
+                    answerString = answerString.substring(0, answerString.length() - 2);
                     feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
                     submitButton.setDisable(true);
                     nextButton.setDisable(false);
@@ -130,6 +132,7 @@ public class SystemsQuizScreen {
                 submitButton.setVisible(false);
                 nextButton.setVisible(false);
                 feedbackLabel.setText("");
+                noSolutionButton.setVisible(false);
                 questionIndex = 1;
                 numCorrect = 0;
             }
