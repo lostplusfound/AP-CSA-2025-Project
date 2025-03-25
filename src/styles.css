@@ -62,37 +62,47 @@
 .start-button {
     -fx-font-size: 20px;
     -fx-padding: 15px 30px;
-    -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
-    -fx-background-radius: 10px;
+    -fx-background-color: transparent;
+    -fx-text-fill: #00ff88;
     -fx-border-radius: 10px;
-    -fx-border-color: #388E3C;
+    -fx-border-color: #00ff88;
     -fx-border-width: 2px;
     -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 255, 128, 0.8), 10, 0, 0, 0);
+    -fx-transition: all 0.2s ease-in-out;
 }
 
 .start-button:hover {
-    -fx-background-color: #45a049;
+    -fx-text-fill: #00ffaa;
+    -fx-border-color: #00ffaa;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 255, 128, 1), 20, 0, 0, 0);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
 }
 
 .start-button:pressed {
-    -fx-background-color: #388E3C;
-    -fx-scale-y: 0.95;
+    -fx-text-fill: #008855;
+    -fx-border-color: #008855;
+    -fx-scale-x: 0.9;
+    -fx-scale-y: 0.9;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 255, 128, 0.6), 5, 0, 0, 0);
 }
 
-/* Det Quiz */
 .quiz-layout {
     -fx-padding: 20px;
     -fx-spacing: 15px;
     -fx-alignment: center;
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: #000000;
 }
 
-/* Question Label */
 .question-label {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #333;
+    -fx-text-fill: #00ff08;
+}
+
+.feedback-label {
+    -fx-text-fill: white;
 }
 
 .matrix-grid {
@@ -107,19 +117,24 @@
     -fx-padding: 10px;
     -fx-border-width: 1px;
     -fx-alignment: center;
+    -fx-text-fill: #00ff08;
+
 }
 
 .matrix-border {
-    -fx-fill: #333;
+    -fx-fill: #00ff08;
 }
 
 .answer-box {
     -fx-font-size: 14px;
     -fx-pref-width: 200px;
     -fx-padding: 5px;
-    -fx-background-color: #fff;
-    -fx-border-color: #ccc;
     -fx-border-radius: 5px;
+    -fx-background-color: rgba(30, 30, 30, 0.8);
+    -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-border-width: 1px;
+    -fx-background-radius: 8px;
 }
 
 .button-box {
@@ -128,55 +143,93 @@
 }
 
 .no-solution-button {
-    -fx-background-color: #000000;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 5px;
+    -fx-background-color: linear-gradient(to bottom, #0d0d0d, #1a1a1a); 
+    -fx-border-color: #888888;
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 15px;
+    -fx-padding: 12px 24px;
+    -fx-border-radius: 3px;
+    -fx-font-family: "Orbitron", sans-serif;
+    -fx-effect: dropshadow(three-pass-box, rgba(192, 192, 192, 0.4), 8, 0, 0, 0); 
+    -fx-transition: all 0.3s ease-in-out;
 }
 
 .no-solution-button:hover {
-    -fx-background-color: #5f5f5f;
+    -fx-background-color: linear-gradient(to bottom, #1a1a1a, #333333);
+    -fx-border-color: #bbbbbb;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(220, 220, 220, 0.7), 10, 0, 0, 0); 
 }
 
+.no-solution-button:pressed {
+    -fx-background-color: #000000;
+    -fx-border-color: #666666;
+    -fx-text-fill: #aaaaaa;
+    -fx-effect: dropshadow(three-pass-box, rgba(150, 150, 150, 0.5), 6, 0, 0, 0);
+}
+
+.submit-button, .next-button, .exit-button {
+    -fx-background-color: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
+    -fx-font-size: 15px;
+    -fx-padding: 12px 24px;
+    -fx-border-radius: 3px;
+    -fx-border-width: 2px;
+    -fx-font-family: "Orbitron", sans-serif;
+    -fx-transition: all 0.3s ease-in-out;
+}
 
 .submit-button {
-    -fx-background-color: #28a745;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 5px;
+    -fx-border-color: #33ff77;
+    -fx-text-fill: #33ff77;
+    -fx-effect: dropshadow(three-pass-box, rgba(51, 255, 119, 0.6), 8, 0, 0, 0);
 }
 
 .submit-button:hover {
-    -fx-background-color: #218838;
+    -fx-background-color: linear-gradient(to bottom, #1a1a1a, #292929);
+    -fx-border-color: #55ff99;
+    -fx-effect: dropshadow(three-pass-box, rgba(85, 255, 153, 0.8), 10, 0, 0, 0);
+}
+
+.submit-button:pressed {
+    -fx-background-color: #000000;
+    -fx-border-color: #229955;
+    -fx-effect: dropshadow(three-pass-box, rgba(34, 153, 85, 0.6), 6, 0, 0, 0);
 }
 
 .next-button {
-    -fx-background-color: #3c6abf;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 5px;
+    -fx-border-color: #3399ff;
+    -fx-text-fill: #3399ff;
+    -fx-effect: dropshadow(three-pass-box, rgba(51, 153, 255, 0.6), 8, 0, 0, 0);
 }
 
 .next-button:hover {
-    -fx-background-color: #31579d;
+    -fx-background-color: linear-gradient(to bottom, #1a1a1a, #292929);
+    -fx-border-color: #55bbff;
+    -fx-effect: dropshadow(three-pass-box, rgba(85, 187, 255, 0.8), 10, 0, 0, 0);
+}
+
+.next-button:pressed {
+    -fx-background-color: #000000;
+    -fx-border-color: #2266aa;
+    -fx-effect: dropshadow(three-pass-box, rgba(34, 102, 170, 0.6), 6, 0, 0, 0);
 }
 
 .exit-button {
-    -fx-background-color: #dc3545;
-    -fx-text-fill: white;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 5px;
+    -fx-border-color: #ff3333;
+    -fx-text-fill: #ff3333;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 51, 51, 0.6), 8, 0, 0, 0);
 }
 
 .exit-button:hover {
-    -fx-background-color: #c82333;
+    -fx-background-color: linear-gradient(to bottom, #1a1a1a, #292929);
+    -fx-border-color: #ff5555;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 85, 85, 0.8), 10, 0, 0, 0);
+}
+
+.exit-button:pressed {
+    -fx-background-color: #000000;
+    -fx-border-color: #aa2222;
+    -fx-effect: dropshadow(three-pass-box, rgba(170, 34, 34, 0.6), 6, 0, 0, 0);
 }
 
 .input-row {
