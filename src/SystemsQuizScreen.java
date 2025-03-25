@@ -31,6 +31,7 @@ public class SystemsQuizScreen {
         matrixGrid.setStyle("-fx-alignment: center;");
 
         HBox inputRow = new HBox();
+        inputRow.setAlignment(javafx.geometry.Pos.CENTER);
         TextField[] inputs = new TextField[size];
         for (int i = 0; i < size; i++) {
             inputs[i] = new TextField();
