@@ -1,9 +1,16 @@
 import java.util.Optional;
+
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 
@@ -41,7 +48,9 @@ public class DetQuizScreen {
         currentMatrix = Module.generateMatrix(size, size);
         updateQuestion(currentMatrix);
 
-        
+        questionLabel.getStyleClass().add("question-label");
+        feedbackLabel.getStyleClass().add("feedback-label");
+
 
         answerBox.setPromptText("Enter answer");
         answerBox.setMaxWidth(200);
@@ -60,9 +69,13 @@ public class DetQuizScreen {
         buttonBox.getStyleClass().add("button-box");
         VBox layout = new VBox(20, questionLabel, matrixGrid, answerBox, feedbackLabel, buttonBox, exitButton);
         layout.getStyleClass().add("quiz-layout");
+        layout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
 
         Scene detQuizScene = new Scene(layout, 400, 400);
         detQuizScene.getStylesheets().add("styles.css");
+        detQuizScene.setFill(Color.BLACK);
+
         return detQuizScene;
     }
 
@@ -72,11 +85,13 @@ public class DetQuizScreen {
             double correctAnswer = currentMatrix.findDet();
 
             if (Math.abs(userAnswer - correctAnswer) < 0.0001) {
+                feedbackLabel.setStyle("-fx-text-fill: #00ff08;");
                 feedbackLabel.setText("Correct!");
                 submitButton.setDisable(true);
                 nextButton.setDisable(false);
                 correctQuestions++;
             } else {
+                feedbackLabel.setStyle("-fx-text-fill:rgb(255, 0, 0);");
                 feedbackLabel.setText("Incorrect. The correct answer is: " + correctAnswer);
                 submitButton.setDisable(true);
                 nextButton.setDisable(false);
