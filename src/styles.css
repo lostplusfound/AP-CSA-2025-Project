@@ -96,13 +96,14 @@
 }
 
 .question-label {
-    -fx-font-size: 18px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: #00ff08;
 }
 
 .feedback-label {
     -fx-text-fill: white;
+    -fx-font-size: 16px;
 }
 
 .matrix-grid {
@@ -113,16 +114,16 @@
 }
 
 .matrix-cell {
-    -fx-font-size: 16px;
-    -fx-padding: 10px;
+    -fx-font-size: 20px;
+    -fx-padding: 15px;
     -fx-border-width: 1px;
     -fx-alignment: center;
     -fx-text-fill: #00ff08;
-
 }
 
 .matrix-border {
     -fx-fill: #00ff08;
+    -fx-height: 100px;
 }
 
 .answer-box {
@@ -235,3 +236,4 @@
 .input-row {
     -fx-alignment: center;
 }
+
