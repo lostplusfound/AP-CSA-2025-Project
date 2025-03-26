@@ -5,6 +5,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -48,7 +49,7 @@ public class SystemsQuizScreen {
             inputs[i] = new TextField();
             inputs[i].getStyleClass().add("answer-box");
             inputs[i].setMaxWidth(120);
-            inputs[i].setPromptText("Value of variable " + (i + 1));
+            inputs[i].setPromptText("Variable " + (i + 1));
         }
         inputRow.getChildren().addAll(inputs);
 
@@ -163,10 +164,12 @@ public class SystemsQuizScreen {
         questionLabel.setText(questionIndex + ". What is the solution to this system?");
         matrixGrid.getChildren().clear();
 
-        Rectangle leftBorder = new Rectangle(1, matrix.numRows() * 50);
+        // Left Border (Solid Line)
+        Rectangle leftBorder = new Rectangle(1, matrix.numRows() * 60);
         leftBorder.getStyleClass().add("matrix-border");
         matrixGrid.add(leftBorder, 0, 0, 1, matrix.numRows());
 
+        // Adding matrix content (coefficients)
         for (int row = 0; row < matrix.numRows(); row++) {
             for (int col = 0; col < matrix.numCols(); col++) {
                 Label label = new Label(String.valueOf(matrix.getElement(row, col)));
@@ -175,7 +178,17 @@ public class SystemsQuizScreen {
             }
         }
 
-        Rectangle rightBorder = new Rectangle(1, matrix.numRows() * 50);
+        // Dashed line
+        Line dashedLine = new Line();
+        dashedLine.setStartY(0);
+        dashedLine.setEndY(matrix.numRows() * 60); 
+        dashedLine.setStrokeWidth(1); 
+        dashedLine.setStroke(javafx.scene.paint.Color.valueOf("#00ff08")); 
+        dashedLine.getStrokeDashArray().addAll(10d, 5d); 
+        matrixGrid.add(dashedLine, matrix.numCols(), 0, 1, matrix.numRows());
+
+        // Right Border (Solid Line)
+        Rectangle rightBorder = new Rectangle(1, matrix.numRows() * 60);
         rightBorder.getStyleClass().add("matrix-border");
         matrixGrid.add(rightBorder, matrix.numCols() + 1, 0, 1, matrix.numRows());
     }
