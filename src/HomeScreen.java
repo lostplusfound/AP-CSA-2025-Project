@@ -40,7 +40,7 @@ public class HomeScreen extends Application {
         startQuizButton.getStyleClass().add("start-button");
 
         // Event for start quiz btn
-        startQuizButton.setOnAction(_ -> {
+        startQuizButton.setOnAction(e -> {
             // Retrieve selected values
             String selectedQuizType = quizTypeChoiceBox.getValue();
             String selectedDifficulty = difficultyChoiceBox.getValue();

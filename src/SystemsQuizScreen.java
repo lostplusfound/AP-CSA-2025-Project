@@ -80,7 +80,7 @@ public class SystemsQuizScreen {
                     answerString += String.format("%.3f, ", d);
                 }
                 feedbackLabel.setStyle("-fx-text-fill:rgb(255, 0, 0);");
-                feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
+                feedbackLabel.setText("Incorrect. The correct answer is: " + answerString.substring(0, answerString.length() - 2));
                 submitButton.setDisable(true);
                 nextButton.setDisable(false);
             }
@@ -109,7 +109,7 @@ public class SystemsQuizScreen {
                         answerString += String.format("%.3f, ", d);
                     }
                     feedbackLabel.setStyle("-fx-text-fill:rgb(255, 0, 0);");
-                    feedbackLabel.setText("Incorrect. The correct answer is: " + answerString);
+                    feedbackLabel.setText("Incorrect. The correct answer is: " + answerString.substring(0, answerString.length() - 2));
                     submitButton.setDisable(true);
                     nextButton.setDisable(false);
                 }
@@ -137,6 +137,7 @@ public class SystemsQuizScreen {
                 inputRow.setVisible(false);
                 submitButton.setVisible(false);
                 nextButton.setVisible(false);
+                noSolutionButton.setVisible(false);
                 feedbackLabel.setText("");
                 questionIndex = 1;
                 numCorrect = 0;
