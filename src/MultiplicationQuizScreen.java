@@ -26,7 +26,7 @@ public class MultiplicationQuizScreen{
   private static GridPane matrix1GridPane;
   private static GridPane matrix2GridPane;
 
-  private static GridPane inputGridPane = new GridPane();
+  private static GridPane inputGridPane;
 
   private static TextField[][] inputFields;
 
@@ -52,11 +52,11 @@ public class MultiplicationQuizScreen{
         size = 4;
     }
 
+    inputFields = new TextField[size][size];
+
     questionLabel = new Label((questionsCorrect + 1) + ". What is the product of these two matrices?");
 
     feedbackLabel = new Label("");
-
-    inputFields = new TextField[size][size];
 
     currentMatrix1 = Module.generateMatrix(size, size);
     currentMatrix2 = Module.generateMatrix(size, size);
@@ -67,10 +67,12 @@ public class MultiplicationQuizScreen{
     matrix1GridPane.setVgap(10);
     matrix1GridPane.setHgap(10);
     matrix2GridPane.setVgap(10);
-    matrix2GridPane.setHgap(10); 
+    matrix2GridPane.setHgap(10);
 
     fillMatrixGridPane(matrix1GridPane, currentMatrix1);
     fillMatrixGridPane(matrix2GridPane, currentMatrix2);
+
+    inputGridPane = new GridPane(); 
 
     for(int r = 0; r < size; r++){
         for(int c = 0; c < size; c++){
@@ -183,6 +185,8 @@ public class MultiplicationQuizScreen{
   }
 
   private static void handleEnd(Stage primaryStage) {
+
+
           new HomeScreen().start(primaryStage);
   }
 
