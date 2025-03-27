@@ -1,6 +1,7 @@
 import java.util.Optional;
 
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Background;
@@ -8,11 +9,10 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Line;
 
 public class DetQuizScreen {
     private static int questionNum = 1;
@@ -134,21 +134,39 @@ public class DetQuizScreen {
     private static void updateQuestion(Matrix matrix) {
         matrixGrid.getChildren().clear();
         double[][] values = matrix.getValues();
-
-        Rectangle leftBorder = new Rectangle(1, values.length * 50);
-        leftBorder.getStyleClass().add("matrix-border");
-        matrixGrid.add(leftBorder, 0, 0, 1, values.length);
-
+    
+        // Left bracket 
+        Group leftBracket = new Group();
+        Line leftVertical = new Line(0, 0, 0, values.length * 50);
+        Line leftTopHorizontal = new Line(0, 0, 10, 0);
+        Line leftBottomHorizontal = new Line(0, values.length * 50, 10, values.length * 50);
+        
+        leftVertical.getStyleClass().add("matrix-border");
+        leftTopHorizontal.getStyleClass().add("matrix-border");
+        leftBottomHorizontal.getStyleClass().add("matrix-border");
+        
+        leftBracket.getChildren().addAll(leftVertical, leftTopHorizontal, leftBottomHorizontal);
+        matrixGrid.add(leftBracket, 1, 0, 1, values.length);
+    
         for (int row = 0; row < values.length; row++) {
             for (int col = 0; col < values[row].length; col++) {
                 Label label = new Label(String.valueOf(values[row][col]));
                 label.getStyleClass().add("matrix-cell");
-                matrixGrid.add(label, col + 1, row);
+                matrixGrid.add(label, col + 2, row);
             }
         }
-
-        Rectangle rightBorder = new Rectangle(1, values.length * 50);
-        rightBorder.getStyleClass().add("matrix-border");
-        matrixGrid.add(rightBorder, values[0].length + 1, 0, 1, values.length);
+    
+        // Right bracket 
+        Group rightBracket = new Group();
+        Line rightVertical = new Line(0, 0, 0, values.length * 50);
+        Line rightTopHorizontal = new Line(0, 0, -10, 0);
+        Line rightBottomHorizontal = new Line(0, values.length * 50, -10, values.length * 50);
+        
+        rightVertical.getStyleClass().add("matrix-border");
+        rightTopHorizontal.getStyleClass().add("matrix-border");
+        rightBottomHorizontal.getStyleClass().add("matrix-border");
+        
+        rightBracket.getChildren().addAll(rightVertical, rightTopHorizontal, rightBottomHorizontal);
+        matrixGrid.add(rightBracket, values[0].length + 2, 0, 1, values.length);
     }
 }
