@@ -67,7 +67,7 @@ public class MultiplicationQuizScreen{
     matrix1GridPane.setVgap(10);
     matrix1GridPane.setHgap(10);
     matrix2GridPane.setVgap(10);
-    matrix2GridPane.setHgap(10);
+    matrix2GridPane.setHgap(10); 
 
     fillMatrixGridPane(matrix1GridPane, currentMatrix1);
     fillMatrixGridPane(matrix2GridPane, currentMatrix2);
