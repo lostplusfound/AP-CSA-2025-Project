@@ -1,12 +1,16 @@
+import java.util.Optional;
+
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class SystemsQuizScreen {
@@ -147,7 +151,15 @@ public class SystemsQuizScreen {
 
         exitButton = new Button("Exit quiz");
         exitButton.getStyleClass().add("exit-button");
-        exitButton.setOnAction(e -> new HomeScreen().start(primaryStage));
+        exitButton.setOnAction(e -> {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setContentText("Are you sure you want to quit? Your progress will not be saved.");
+            Optional<ButtonType> result = confirm.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                new HomeScreen().start(primaryStage);
+            }
+        });
+        
 
         HBox buttonBox = new HBox(10, noSolutionButton, submitButton, nextButton);
         buttonBox.setStyle("-fx-alignment: center;");
@@ -163,11 +175,20 @@ public class SystemsQuizScreen {
     private static void updateQuestion(Matrix matrix) {
         questionLabel.setText(questionIndex + ". What is the solution to this system?");
         matrixGrid.getChildren().clear();
+        double[][] values = matrix.getValues();
 
-        // Left Border (Solid Line)
-        Rectangle leftBorder = new Rectangle(1, matrix.numRows() * 60);
-        leftBorder.getStyleClass().add("matrix-border");
-        matrixGrid.add(leftBorder, 0, 0, 1, matrix.numRows());
+        // Left bracket 
+        Group leftBracket = new Group();
+        Line leftVertical = new Line(0, 0, 0, values.length * 50);
+        Line leftTopHorizontal = new Line(0, 0, 10, 0);
+        Line leftBottomHorizontal = new Line(0, values.length * 50, 10, values.length * 50);
+        
+        leftVertical.getStyleClass().add("matrix-border");
+        leftTopHorizontal.getStyleClass().add("matrix-border");
+        leftBottomHorizontal.getStyleClass().add("matrix-border");
+        
+        leftBracket.getChildren().addAll(leftVertical, leftTopHorizontal, leftBottomHorizontal);
+        matrixGrid.add(leftBracket, 1, 0, 1, values.length);
 
         // Adding matrix content (coefficients)
         for (int row = 0; row < matrix.numRows(); row++) {
@@ -181,16 +202,24 @@ public class SystemsQuizScreen {
         // Dashed line
         Line dashedLine = new Line();
         dashedLine.setStartY(0);
-        dashedLine.setEndY(matrix.numRows() * 60); 
+        dashedLine.setEndY(matrix.numRows() * 50); 
         dashedLine.setStrokeWidth(1); 
         dashedLine.setStroke(javafx.scene.paint.Color.valueOf("#00ff08")); 
         dashedLine.getStrokeDashArray().addAll(10d, 5d); 
         matrixGrid.add(dashedLine, matrix.numCols(), 0, 1, matrix.numRows());
 
-        // Right Border (Solid Line)
-        Rectangle rightBorder = new Rectangle(1, matrix.numRows() * 60);
-        rightBorder.getStyleClass().add("matrix-border");
-        matrixGrid.add(rightBorder, matrix.numCols() + 1, 0, 1, matrix.numRows());
+        // Right bracket 
+        Group rightBracket = new Group();
+        Line rightVertical = new Line(0, 0, 0, values.length * 50);
+        Line rightTopHorizontal = new Line(0, 0, -10, 0);
+        Line rightBottomHorizontal = new Line(0, values.length * 50, -10, values.length * 50);
+        
+        rightVertical.getStyleClass().add("matrix-border");
+        rightTopHorizontal.getStyleClass().add("matrix-border");
+        rightBottomHorizontal.getStyleClass().add("matrix-border");
+        
+        rightBracket.getChildren().addAll(rightVertical, rightTopHorizontal, rightBottomHorizontal);
+        matrixGrid.add(rightBracket, values[0].length + 2, 0, 1, values.length);
     }
 
     private static double parseUserAnswer(String input) {
