@@ -6,11 +6,25 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MatrixMultiplicationQuiz",
+            "request": "launch",
+            "mainClass": "MatrixMultiplicationQuiz",
+            "projectName": "AP-CSA-2025-Project_a980e528"
+        },
+        {
+            "type": "java",
+            "name": "HomeScreen",
+            "request": "launch",
+            "mainClass": "HomeScreen",
+            "projectName": "AP-CSA-2025-Project_a980e528"
+        },
+        {
+            "type": "java",
             "name": "HomeScreen",
             "request": "launch",
             "mainClass": "HomeScreen",
             "projectName": "AP-CSA-2025-Project_3523e185",
-            "vmArgs": "--module-path javafx-sdk-23.0.2/lib --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
@@ -32,14 +46,14 @@
             "request": "launch",
             "mainClass": "HelloWorld",
             "projectName": "AP-CSA-2025-Project_3523e185",
-            "vmArgs": "--module-path javafx-sdk-23.0.2/lib --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path javafx-sdk-24/lib --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "vmArgs": "--module-path javafx-sdk-23.0.2/lib --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path javafx-sdk-24/lib --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }

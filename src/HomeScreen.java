@@ -40,27 +40,28 @@ public class HomeScreen extends Application {
             String numQuestionsInput = numQuestionsTextField.getText();
 
             try {
-                int numQuestions = Integer.parseInt(numQuestionsInput); 
-                
+                int numQuestions = Integer.parseInt(numQuestionsInput);
+
                 if (numQuestions <= 0) {
                     Alert a = new Alert(Alert.AlertType.ERROR);
                     a.setContentText("The number of questions must be a positive integer.");
                     a.show();
-                    return; 
+                    return;
                 }
-                             
+
                 Module selectedModule = new Module(selectedQuizType, numQuestions, selectedDifficulty);
                 System.out.println("Starting " + selectedQuizType + " Quiz with " + numQuestions + " questions at " + selectedDifficulty + " difficulty.");
                 primaryStage.setMaximized(true);
 
 
                 switch(selectedQuizType){
-                    case "Determinant": 
+                    case "Determinant":
                         primaryStage.setScene(DetQuizScreen.createQuizScene(primaryStage, selectedModule));
                         break;
                     case "Multiplication":
+                        primaryStage.setScene(MultiplicationQuizScreen.createQuizScene(primaryStage, selectedModule)); 
                         break;
-                    case "Systems": 
+                    case "Systems":
                         primaryStage.setScene(SystemsQuizScreen.getScene(primaryStage, selectedModule));
                 }
             } catch (NumberFormatException ex) {
@@ -76,7 +77,7 @@ public class HomeScreen extends Application {
         StackPane root = new StackPane(layout);
         root.getStyleClass().add("home-screen");
 
-        
+
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         double screenWidth = screenBounds.getWidth();
         double screenHeight = screenBounds.getHeight();
