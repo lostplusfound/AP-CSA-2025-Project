@@ -145,6 +145,7 @@ public class MultiplicationQuizScreen {
                 try {
                     inputValues[r][c] = Double.parseDouble(inputFields[r][c].getText().trim());
                 } catch (NumberFormatException e) {
+                    feedbackLabel.setStyle("-fx-text-fill: white");
                     feedbackLabel.setText("Please enter a valid number in each field.");
                     return;
                 }
