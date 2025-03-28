@@ -3,3 +3,6 @@ javafx-sdk-23.0.2
 
 # Test 
 Test.java
+
+# Compiled Class files
+*.class
