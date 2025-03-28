@@ -16,11 +16,13 @@ public class MultiplicationQuizScreen {
     private static Label questionLabel;
 
     private static Label feedbackLabel;
+    private static Button nextButton;
+    private static Button submitButton;
 
     private static GridPane matrix1GridPane;
     private static GridPane matrix2GridPane;
-
     private static GridPane inputGridPane = new GridPane();
+    private static HBox inputMatrix;
 
     private static TextField[][] inputFields;
 
@@ -29,13 +31,12 @@ public class MultiplicationQuizScreen {
     private static String difficulty;
     private static int size;
     private static int numQuestions;
-
+    private static int questionNum;
     private static int questionsCorrect = 0;
-
-    private static boolean correct = false;
 
     public static Scene createQuizScene(Stage primaryStage, Module selectedModule) {
         difficulty = selectedModule.getDifficulty();
+        questionNum = 1;
         numQuestions = selectedModule.getNumQuestions();
     
         if (difficulty.equals("Easy")) {
@@ -70,7 +71,7 @@ public class MultiplicationQuizScreen {
         inputGridPane.getStyleClass().add("input-matrix-grid");
     
         // Create a container for the brackets and the input grid
-        HBox inputMatrix = new HBox(10);
+        inputMatrix = new HBox(10);
         inputMatrix.getStyleClass().add("matrix-grid");
     
         // Left bracket for input matrix
@@ -109,14 +110,15 @@ public class MultiplicationQuizScreen {
         inputMatrix.getChildren().addAll(leftBracket, inputGridPane, rightBracket);
     
         // Button setup
-        Button submitButton = new Button("Submit");
+        submitButton = new Button("Submit");
         submitButton.getStyleClass().add("submit-button");
         submitButton.setOnAction(e -> handleSubmit());
     
-        Button nextButton = new Button("Next");
+        nextButton = new Button("Next");
         nextButton.getStyleClass().add("next-button");
         nextButton.setOnAction(e -> handleNext(primaryStage));
-    
+        nextButton.setDisable(true);  
+
         Button exitButton = new Button("Exit quiz");
         exitButton.getStyleClass().add("exit-button");
         exitButton.setOnAction(e -> handleBack(primaryStage));
@@ -135,11 +137,9 @@ public class MultiplicationQuizScreen {
         return matrixMultiplicationQuizScreen;
     }
     
-    
-
     public static void handleSubmit() {
         double[][] inputValues = new double[size][size];
-
+    
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 try {
@@ -150,44 +150,48 @@ public class MultiplicationQuizScreen {
                 }
             }
         }
-
+    
         Matrix inputMatrix = new Matrix(inputValues);
-
-        if (inputMatrix.equals(currentMatrix1.multiply(currentMatrix2))) {
-            correct = true;
+        Matrix answer = currentMatrix1.multiply(currentMatrix2);
+    
+        if (inputMatrix.equals(answer)) {
             questionsCorrect++;
+            feedbackLabel.setStyle("-fx-text-fill: #00ff08;");
             feedbackLabel.setText("Correct!");
+            nextButton.setDisable(false);
         } else {
-            correct = false;
-            feedbackLabel.setText("Try again!");
+            feedbackLabel.setStyle("-fx-text-fill: rgb(255, 0, 0)");
+            feedbackLabel.setText("Incorrect! The correct answer is:\n" + answer);
+            nextButton.setDisable(false);
         }
     }
+    
+    
 
-    public static void handleNext(Stage primaryStage) {
-        if (correct) {
-            if (questionsCorrect == numQuestions) {
-                handleEnd(primaryStage);
-            } else {
-                currentMatrix1 = Module.generateMatrix(size, size);
-                currentMatrix2 = Module.generateMatrix(size, size);
+    public static void handleNext(Stage primaryStage) {   
+        if (questionNum >= numQuestions) {
+            handleEnd();
+        } else {
+            questionNum++;
+            currentMatrix1 = Module.generateMatrix(size, size);
+            currentMatrix2 = Module.generateMatrix(size, size);
 
-                matrix1GridPane.getChildren().clear();
-                matrix2GridPane.getChildren().clear();
+            matrix1GridPane.getChildren().clear();
+            matrix2GridPane.getChildren().clear();
 
-                fillMatrixGridPane(matrix1GridPane, currentMatrix1);
-                fillMatrixGridPane(matrix2GridPane, currentMatrix2);
+            fillMatrixGridPane(matrix1GridPane, currentMatrix1);
+            fillMatrixGridPane(matrix2GridPane, currentMatrix2);
 
-                questionLabel.setText((questionsCorrect + 1) + ". What is the product of these two matrices?");
+            questionLabel.setText(questionNum + ". What is the product of these two matrices?");
+            feedbackLabel.setText("");
+            nextButton.setDisable(true);
 
-                feedbackLabel.setText("");
-
-                for (int r = 0; r < size; r++) {
-                    for (int c = 0; c < size; c++) {
-                        inputFields[r][c].clear();
-                    }
+            for (int r = 0; r < size; r++) {
+                for (int c = 0; c < size; c++) {
+                    inputFields[r][c].clear();
                 }
             }
-        }
+        }     
     }
 
     public static void fillMatrixGridPane(GridPane gridPane, Matrix matrix) {
@@ -240,7 +244,12 @@ public class MultiplicationQuizScreen {
         }
     }
 
-    private static void handleEnd(Stage primaryStage) {
-        new HomeScreen().start(primaryStage);
+    private static void handleEnd() {
+        questionLabel.setText("Quiz complete! You scored " + (questionsCorrect / (double) numQuestions) * 100 + "%");
+        questionMatrices.setVisible(false);
+        inputMatrix.setVisible(false);
+        submitButton.setVisible(false);
+        nextButton.setVisible(false);
+        feedbackLabel.setText("");
     }
 }
