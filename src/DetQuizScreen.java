@@ -97,6 +97,7 @@ public class DetQuizScreen {
                 nextButton.setDisable(false);
             }
         } catch (NumberFormatException ex) {
+            feedbackLabel.setStyle("-fx-text-fill: white");
             feedbackLabel.setText("Invalid input. Please enter a number.");
         }
     }
