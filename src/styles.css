@@ -1,5 +1,5 @@
 .home-screen {
-    -fx-background-image: url("images/rain.gif");
+    -fx-background-image: url("images/matrix.jpg");
     -fx-background-size: cover;
     -fx-background-position: center;
 }
@@ -107,9 +107,6 @@
 }
 
 .matrix-grid {
-    -fx-hgap: 10px;
-    -fx-vgap: 10px;
-    -fx-border-width: 2px;
     -fx-alignment: center;
 }
 
@@ -122,8 +119,8 @@
 }
 
 .matrix-border {
-    -fx-fill: #00ff08;
-    -fx-height: 100px;
+    -fx-stroke: #00ff08;
+    -fx-stroke-width: 1px;
 }
 
 .answer-box {
@@ -237,3 +234,27 @@
     -fx-alignment: center;
 }
 
+.input-matrix-grid {
+    -fx-hgap: 5;
+    -fx-vgap: 5;
+    -fx-alignment: center;
+}
+
+.input-matrix-cell {
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+    -fx-text-alignment: center;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: lightgray;
+    -fx-background-color: rgba(30, 30, 30, 0.8);
+    -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-border-width: 1px;
+    -fx-background-radius: 8px;
+    -fx-alignment: center;
+}
+
+.input-matrix-border {
+    -fx-stroke: white;
+    -fx-stroke-width: 1px;
+}
