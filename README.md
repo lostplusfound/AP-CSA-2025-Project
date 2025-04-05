@@ -6,7 +6,7 @@ Created by [@coshpp](https://github.com/coshpp), [@ethaneffendi](https://github.
 
 ## 🚀 Features
 - Practice key matrix concepts like **determinants**,  **multiplication**, and **systems**
-- Interactive UI built with **JavaFX**, inspired by the movie "The Matrix"
+- Interactive UI built with **JavaFX**, inspired by the movie, *The Matrix*
 - Three levels of difficulty to fit all skill levels 
 - Instant feedback and score tracking to encourage learning 
 
