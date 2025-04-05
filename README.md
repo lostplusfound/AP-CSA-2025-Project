@@ -16,8 +16,8 @@ Created by [@coshpp](https://github.com/coshpp), [@ethaneffendi](https://github.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/lostplusfound/AP-CSA-2025-Project.git
-   cd AP-CSA-2025-Project
+   git clone https://github.com/lostplusfound/the-matrix.git
+   cd the-matrix
    ```
 
 2. **Download and Set Up JavaFX SDK**
