@@ -1,6 +1,6 @@
 # The Matrix
 
-Created by [@coshpp](https://github.com/coshpp), [@ethaneffendi](https://github.com/coshpp), and [@lostplusfound](https://github.com/lostplusfound), **The Matrix** is an educational game built with JavaFX that helps students strengthen their matrix math skills. Developed as part of our AP Computer Science A final project, the game challenges users with matrix operations in a fun and intuitive format.
+Created by [@coshpp](https://github.com/coshpp), [@ethaneffendi](https://github.com/ethaneffendi), and [@lostplusfound](https://github.com/lostplusfound), **The Matrix** is an educational game built with JavaFX that helps students strengthen their matrix math skills. Developed as part of our AP Computer Science A final project, the game challenges users with matrix operations in a fun and intuitive format.
 
 ---
 
